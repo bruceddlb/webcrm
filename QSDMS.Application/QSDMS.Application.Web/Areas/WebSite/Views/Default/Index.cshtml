@@ -1,0 +1,114 @@
+﻿@{
+    Layout = "~/Areas/WebSite/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "首页";
+}
+@{
+
+}
+<style>
+   
+</style>
+<!-----start-slider---->
+<div class="slider" id="home">
+        <script src="/WebSiteContent/js/responsiveslides.min.js"></script>
+        <script>
+            function BindBanner() {
+                $.get("/WebSite/Default/GetBanner", null, function (data) {
+                    if (data) {
+                        var json = eval("(" + data + ")");
+                        var slid = "";
+                        var slidpager = "";
+                        for (var i = 0; i < json.length; i++) {
+                            slid += '<li>';
+                            slid += '<img src="' + json[i].ImgPath + '" />';
+                            slid += '<div class="slid-info"></div>';
+                            slid += '</li>';
+                            slidpager += ' <li><a href="#"><span> </span></a></li>';
+                        }
+                        $("#slider3").html(slid);
+                        $("#slider3-pager").html(slidpager);
+                        $("#slider3").responsiveSlides({
+                            manualControls: '#slider3-pager',
+                        });
+                    }
+                });
+            }
+            $(function () {
+                BindBanner();
+            });
+        </script>
+        <!-- Slideshow -->
+        <ul class="rslides" id="slider3"></ul>
+        <!-- Slideshow -->
+        <ul id="slider3-pager"></ul>
+    </div>
+
+<!-----//End-slider---->
+@*<div class="" style="" id="home">
+    <img src="@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("1") == "" ? "/WebSiteContent/images/title1.jpg" : new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("1"))" width="100%" class="wow animated fadeInUp" height="100%" />
+</div>*@
+@*公司简介*@
+<div id="about" class="wow animated fadeInUp" style="padding-top: 50%; background: url('@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("7") == "" ? "/WebSiteContent/images/1.jpg" : new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("7"))') no-repeat; background-size: cover; background-position: center; padding-top: 20%; padding-bottom: 30%;">
+    <div class="container" style=" text-align: center; ">
+        <h2 style="color:#023C6B" class="wow animated fadeInDownBig">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("Home1"))</h2>
+        <div class="animated fadeInDownBig"></div>
+        <p class="animated lightSpeedIn" style="padding-top:20px;text-align:left">@Html.Raw(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("Home1")) </p>
+        <p style="float: right;"><a href="/WebSite/About/Index" class="more">more</a></p>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@*资源*@
+<div id="service" class="wow animated fadeInUp" style="background: url('@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("8") == "" ? "/WebSiteContent/images/2.jpg" : new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("8"))') no-repeat; background-size: cover; background-position: center;  padding-top: 20%; padding-bottom: 20%;">
+
+    <div class="container" style="color:#FFFFFF">
+
+        <h2 style="" class="wow animated fadeInUp">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("Home2"))</h2>
+        <div class="wow animated fadeInUp"></div>
+        <p class="wow animated lightSpeedIn" style="padding-top:20px;text-align:left">@Html.Raw(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("Home2")) </p>
+        <p style="float: right;  "><a href="/WebSite/ServiceResource/Index" class="more" style="background: #7CACCF">more</a></p>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+@*服务*@
+<div id="health" class="wow animated fadeInUp" style="background: url('@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("9") == "" ? "/WebSiteContent/images/3.jpg" : new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("9"))') no-repeat; background-size: cover;padding-left:10%; padding-top: 20%; padding-bottom: 20%;">
+    <div class="" style="text-align: center;">
+        <div class="row" style="padding-right: 50px;">
+            <div class="col-md-7">
+            </div>
+            <div class="col-md-3">
+                <h2  style="text-align: left; color: #023C6B" class="wow animated fadeInUp">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("Home3"))</h2>
+                <p  style="padding-top:20px;text-align:left" class="wow animated lightSpeedIn">@Html.Raw(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("Home3")) </p>
+                <p style="float: right;  "><a href="/WebSite/HealthService/Index" class="more">more</a></p>
+
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@*资讯*@
+<div id="news" class="wow animated fadeInUp" style="background: url('@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("10") == "" ? "/WebSiteContent/images/4.jpg" : new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("10"))') no-repeat; background-size: cover; padding-top: 20%; padding-bottom: 20%;">
+
+    <div class="container" style="text-align:center; color:#FFFFFF">
+
+        <h2 style="" class="wow animated fadeInUp">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("Home4"))</h2>
+        <div class="wow animated fadeInUp"></div>
+        <p class="wow animated lightSpeedIn" style="padding-top:20px;text-align:left">@Html.Raw(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("Home4")) </p>
+        <p style="float: right;  "><a href="/WebSite/News/Index" class="more">more</a></p>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@*联系*@
+<div id="contact" class="wow animated fadeInUp" style="background: url('@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("11") == "" ? "/WebSiteContent/images/5.jpg" : new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("11"))') no-repeat 0px 0px; background-size: cover; /*background-position: center;*/ padding-left: 10%; padding-top: 20%; padding-bottom: 20%;">
+    <div class="row" style="padding-right: 50px;">
+        <div class="col-md-7">
+        </div>
+        <div class="col-md-3">
+            <h2 style="text-align: left; color: #023C6B" class="wow animated fadeInUp">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("Home5"))</h2>
+            <p style=" padding-top:20px;text-align:left" class="wow animated lightSpeedIn">@Html.Raw(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("Home5")) </p>
+            <p style="float: right; margin-top: 2em;"><a href="/WebSite/Contact/Index" class="more">more</a></p>
+
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+</div>

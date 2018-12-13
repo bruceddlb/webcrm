@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "编辑";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Head{
+
+}
+
+<script src="/Content/scripts/plugins/touchTouch/touchTouch.jquery.js"></script>
+<link href="/Content/scripts/plugins/touchTouch/touchTouch.css" rel="stylesheet" />
+<script src="~/Content/scripts/plugins/ueditor/ueditor.config.js"></script>
+<script src="~/Content/scripts/plugins/ueditor/ueditor.all.js"></script>
+<script>
+    var keyValue = request('keyValue');//获得主键
+
+    $(function () {
+
+        initControl();
+    })
+    //初始化控件
+    function initControl() {
+        $("#dllLanguage").ComboBox({
+            url: "/SiteManage/LanguageInfo/GetListJson",
+            param: null,
+            id: "LanguageKey",
+            text: "Name",
+            description: "==选择语言==",
+            height: "170px",
+            allowSearch: true
+        })
+
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "/ResourceManage/Cate/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    if (data.LanguageKey) {
+                        $("#dllLanguage").ComboBoxSetValue(data.LanguageKey);
+                    }
+                }
+            });
+        } else {
+
+        }
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        postData["LanguageKey"] = $("#dllLanguage").attr('data-value');
+        $.SaveForm({
+            url: "/ResourceManage/Cate/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+    function OverrideExistField(id, url) {
+        console.log(id);
+        $.ExistField(id, url, { lankey: $("#dllLanguage").attr('data-value') });
+    }
+
+</script>
+
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form" style="table-layout: auto;">
+        <tr>
+            <td class="formTitle">语言<font face="宋体">*</font></td>
+            <td class="formValue" colspan="3">
+                <div id="dllLanguage" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull">
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="formTitle">名称<font face="宋体">*</font></td>
+            <td class="formValue" colspan="3">
+                <input id="Title" type="text" class="form-control" placeholder="请输名称" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">排序号<font face="宋体">*</font></td>
+            <td class="formValue" colspan="3">
+                <input id="SortNum" type="text" class="form-control input-profile" isvalid="yes" checkexpession="Num" />
+            </td>
+        </tr>
+    </table>
+</div>

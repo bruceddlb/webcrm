@@ -1,0 +1,6 @@
+﻿$('.pagination').pagination(100,{
+		callback: function(page){
+			alert(page);	
+		},
+		display_msg: false
+	});

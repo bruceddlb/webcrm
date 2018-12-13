@@ -1,0 +1,147 @@
+﻿@{
+    Layout = "~/Areas/WebSite/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "医疗资源";
+}
+<script>
+    var type = request('type')
+    function request(keyValue) {
+        var search = location.search.slice(1);
+        var arr = search.split("&");
+        for (var i = 0; i < arr.length; i++) {
+            var ar = arr[i].split("=");
+            if (ar[0] == keyValue) {
+                if (unescape(ar[1]) == 'undefined') {
+                    return "";
+                } else {
+                    return unescape(ar[1]);
+                }
+            }
+        }
+        return "";
+    }
+    function GetClassData() {
+        $.get("/WebSite/ServiceResource/GetClassList", null, function (data) {
+            if (data) {
+                var json = eval("(" + data + ")");
+                var html = "";
+                for (var i = 0; i < json.length; i++) {
+                    var row = json[i];
+                    html += '<li><a href="/WebSite/ServiceResource/Index?classid=' + row.ServiceClassId + '">' + row.Title + '</a></li>';
+
+                }
+
+                $("#ulclass").empty().append(html);
+            }
+        });
+    }
+
+    function GetmedicalData() {
+        $.get("/WebSite/MedicalResource/GetMedicalList", null, function (data) {
+            if (data) {
+                var json = eval("(" + data + ")");
+                var html = "";
+                for (var i = 0; i < json.length; i++) {
+                    var row = json[i];
+                    var path = "/WebSiteContent/images/nopic.png";
+                    if (row.FaceImage) {
+                        path = row.FaceImage;
+                    }
+                    html += '<div style="padding:10px;margin-top:10px;">';
+                    html += ' <div class="col-md-8">';
+                    html += '<div class="" style="font-weight:bold; font-size:18px;color:#1a6cb9">' + row.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + row.Post + '</div>';
+                    html += '<div class="" style="margin-top:20px">  ' + row.Content + '</div>';
+                    html += ' </div>';
+                    html += '<div class="col-md-4" style="text-align:rigth">';
+                    html += ' <img src="' + path + '" title="name" width="100%">';
+                    html += '</div>';
+                    html += ' <div class="clearfix"> </div>';
+                    html += '</div>';
+
+
+                }
+
+                $("#divmedical").empty().append(html);
+            }
+        });
+    }
+    function GethotelData() {
+        $.get("/WebSite/MedicalResource/GetHotelList", null, function (data) {
+            if (data) {
+                var json = eval("(" + data + ")");
+                var html = "";
+                for (var i = 0; i < json.length; i++) {
+                    var row = json[i];
+                    var path = "/WebSiteContent/images/nopic.png";
+                    if (row.FaceImage) {
+                        path = row.FaceImage;
+                    }
+                    html += ' <div class="col-md-6" style="margin-top:10px">';
+                    html += '  <p> <img src="' + path + '" title="name" width="100%"></p>';
+                    html += '<div class="" style="font-weight:bold; font-size:18px;color:#1a6cb9;text-align:center">' + row.Title + '  </div>';
+                    html += '</div>';
+                }
+                html += ' <div class="clearfix"> </div>';
+
+                $("#divhotel").empty().append(html);
+            }
+        });
+    }
+
+    $(function () {
+        GetClassData();
+        GetmedicalData();
+        GethotelData();
+
+        $(".treebox .level1>a").click(function () {
+            //隐藏其他的分类
+            $(this).addClass('current')   //给当前元素添加"current"样式
+            .find('i').addClass('down')   //小箭头向下样式
+            .parent().next().slideDown('slow', 'easeOutQuad')  //下一个元素显示
+            .parent().siblings().children('a').removeClass('current')//父元素的兄弟元素的子元素去除"current"样式
+            .find('i').removeClass('down').parent().next().slideUp('slow', 'easeOutQuad');//隐藏
+            return false; //阻止默认时间
+        });
+    })
+
+</script>
+<div class="" style="" id="">
+    <img src="@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("3") == "" ? "/WebSiteContent/images/title6.jpg" : new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("3"))" width="100%" class="wow animated fadeInUp" height="100%" />
+
+</div>
+<div class="container" style="margin-top:50px">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="bgTitle" style="margin-top:10px;">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header3"))</div>
+            <div class="treebox">             
+                <ul class="menu">
+                    <li class="level1">
+                        <a href="#none" class="current"><em class="ico ico3"></em>@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav6"))<i class="down"></i></a>
+                        <ul class="level2" style="overflow: hidden; display: block;">
+                            <li><a href="/WebSite/MedicalResource/Index#medical">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav6"))</a></li>
+                            <li><a href="/WebSite/MedicalResource/Index#hotel">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav7"))</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="level1">
+                        <a class=""><em class="ico ico3"></em>@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav5"))<i></i></a>
+                        <ul class="level2" style="overflow: hidden; display: none;" id="ulclass"></ul>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9" id="">
+            <div id="medical"></div>
+            <div id="divmedical">
+            </div>
+
+        </div>
+    </div>
+    <div id="hotel"></div>
+    <div class="container" style="margin-top:40px" id="">
+        <img src="/WebSiteContent/images/b13.jpg" width="100%" class="animated fadeInDownBig" />
+        <div id="divhotel"></div>
+    </div>
+  
+</div>

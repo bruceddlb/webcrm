@@ -1,0 +1,299 @@
+﻿@{
+    ViewBag.Title = "编辑";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Head{
+
+}
+<script>
+    var keyValue = "1";//获得主键
+    $(function () {
+
+        initControl();
+
+        ////上传图片
+        $('#uploadPreview1').unbind("click").bind("click", function () {
+            $("#uploadFile1").click();
+        });
+        $('#uploadPreview2').unbind("click").bind("click", function () {
+            $("#uploadFile2").click();
+        });
+        $('#uploadPreview3').unbind("click").bind("click", function () {
+            $("#uploadFile3").click();
+        });
+        $('#uploadPreview4').unbind("click").bind("click", function () {
+            $("#uploadFile4").click();
+        });
+        $('#uploadPreview5').unbind("click").bind("click", function () {
+            $("#uploadFile5").click();
+        });
+        $('#uploadPreview6').unbind("click").bind("click", function () {
+            $("#uploadFile6").click();
+        });
+        $('#uploadPreview7').unbind("click").bind("click", function () {
+            $("#uploadFile7").click();
+        });
+        $('#uploadPreview8').unbind("click").bind("click", function () {
+            $("#uploadFile8").click();
+        });
+        $('#uploadPreview9').unbind("click").bind("click", function () {
+            $("#uploadFile9").click();
+        });
+        $('#uploadPreview10').unbind("click").bind("click", function () {
+            $("#uploadFile10").click();
+        });
+        $('#uploadPreview11').unbind("click").bind("click", function () {
+            $("#uploadFile11").click();
+        });
+        $("#btn_Save").bind("click", function () {
+            AcceptClick();
+        })
+    })
+    //初始化控件
+    function initControl() {
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "/SiteManage/Site/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    //图片
+                    //if (data.Back1) {
+                    //    document.getElementById('uploadPreview1').src = data.Back1;
+                    //}
+                    if (data.Back2) {
+                        document.getElementById('uploadPreview2').src = data.Back2;
+                    }
+                    if (data.Back3) {
+                        document.getElementById('uploadPreview3').src = data.Back3;
+                    }
+                    if (data.Back4) {
+                        document.getElementById('uploadPreview4').src = data.Back4;
+                    }
+                    if (data.Back5) {
+                        document.getElementById('uploadPreview5').src = data.Back5;
+                    }
+                    if (data.Back6) {
+                        document.getElementById('uploadPreview6').src = data.Back6;
+                    }
+                    if (data.Back7) {
+                        document.getElementById('uploadPreview7').src = data.Back7;
+                    }
+                    if (data.Back8) {
+                        document.getElementById('uploadPreview8').src = data.Back8;
+                    }
+                    if (data.Back9) {
+                        document.getElementById('uploadPreview9').src = data.Back9;
+                    }
+                    if (data.Back10) {
+                        document.getElementById('uploadPreview10').src = data.Back10;
+                    }
+                    if (data.Back11) {
+                        document.getElementById('uploadPreview11').src = data.Back11;
+                    }
+                }
+            });
+        } else {
+
+        }
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "/SiteManage/Site/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                // $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+        //var postData = {};
+        //postData["Back1"] = $("#Back1").val();
+        //postData["Back2"] = $("#Back2").val();
+        //postData["Back3"] = $("#Back3").val();
+        //postData["Back4"] = $("#Back4").val();
+        //postData["Back5"] = $("#Back5").val();
+        //postData["Back6"] = $("#Back6").val();
+        //$.ajax({
+        //    url: "/SiteManage/Site/SaveForm",
+        //    type: 'POST',
+        //    data: { aa: postData },//JSON.stringify(postData),
+        //    async: false,
+        //    cache: false,
+        //    contentType: false,
+        //    processData: false,
+        //    success: function (data) {
+        //        alert(111)
+        //    }
+        //});
+    }
+
+    //检查文件类型
+    function UpPicFile(type) {
+        var array = new Array('gif', 'jpeg', 'png', 'jpg');  //可以上传的文件类型
+        var fileContentType = $("#uploadFile" + type).val().match(/^(.*)(\.)(.{1,8})$/)[3]; //这个文件类型正则很有用：）
+        var isExists = false;
+        for (var i in array) {
+            if (fileContentType.toLowerCase() == array[i].toLowerCase()) {
+                isExists = true;
+            }
+        }
+        if (isExists == false) {
+            $("#uploadFile" + type).val("")
+            dialogMsg("上传图片类型不正确!", 2);
+            return false;
+        }
+        var f = document.getElementById('uploadFile' + type).files[0]
+        var src = window.URL.createObjectURL(f);
+        document.getElementById('uploadPreview' + type).src = src;
+        var formData = new FormData();
+        //为FormData对象添加数据
+        $.each($('#uploadFile' + type)[0].files, function (i, file) {
+            formData.append('file', file);
+        });
+        //上传应用图标
+        $.ajax({
+            url: "/Upload/UploadFile",
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data && data.IsSuccess) {
+                    $("#Back" + type).val(data.ResultData["files"]);
+                }
+                else {
+                    alert(data.Message);
+                }
+            }
+        });
+    }
+</script>
+
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form" style="table-layout: auto;">
+
+        <tr>
+           
+            <td class="formTitle">首页背景1</td>
+            <td class="formValue" colspan="">
+                <input id="Back7" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview7" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile7" id="uploadFile7" style="display:none" onchange="UpPicFile(7)">
+                </div>
+            </td>
+
+            <td class="formTitle">首页背景2</td>
+            <td class="formValue" colspan="">
+                <input id="Back8" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview8" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile8" id="uploadFile8" style="display:none" onchange="UpPicFile(8)">
+                </div>
+            </td>
+        </tr>
+        <tr>
+
+            <td class="formTitle">首页背景3</td>
+            <td class="formValue" colspan="">
+                <input id="Back9" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview9" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile9" id="uploadFile9" style="display:none" onchange="UpPicFile(9)">
+                </div>
+            </td>
+
+            <td class="formTitle">首页背景4</td>
+            <td class="formValue" colspan="">
+                <input id="Back10" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview10" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile10" id="uploadFile10" style="display:none" onchange="UpPicFile(10)">
+                </div>
+            </td>
+        </tr>
+        <tr>
+
+            <td class="formTitle">首页背景5</td>
+            <td class="formValue" colspan="">
+                <input id="Back11" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview11" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile11" id="uploadFile11" style="display:none" onchange="UpPicFile(11)">
+                </div>
+            </td>
+
+         
+        </tr>
+        <tr>
+            @*<td class="formTitle">首页</td>
+            <td class="formValue" colspan="">
+                <input id="Back1" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview1" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile1" id="uploadFile1" style="display:none" onchange="UpPicFile(1)">
+                </div>
+            </td>*@
+
+            <td class="formTitle">关于我们</td>
+            <td class="formValue" colspan="">
+                <input id="Back2" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview2" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile2" id="uploadFile2" style="display:none" onchange="UpPicFile(2)">
+                </div>
+            </td>
+
+            <td class="formTitle">优质资源</td>
+            <td class="formValue" colspan="">
+                <input id="Back3" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview3" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile3" id="uploadFile3" style="display:none" onchange="UpPicFile(3)">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">健康服务</td>
+            <td class="formValue" colspan="">
+                <input id="Back4" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview4" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile4" id="uploadFile4" style="display:none" onchange="UpPicFile(4)">
+                </div>
+            </td>
+
+            <td class="formTitle">咨询中心</td>
+            <td class="formValue" colspan="">
+                <input id="Back5" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview5" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile5" id="uploadFile5" style="display:none" onchange="UpPicFile(5)">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">联系我们</td>
+            <td class="formValue" colspan="">
+                <input id="Back6" type="hidden" />
+                <div class="" style="">
+                    <img id="uploadPreview6" style="max-width:300px" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile6" id="uploadFile6" style="display:none" onchange="UpPicFile(6)">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2" style="text-align:right"><input type="button" class="btn btn-primary btn-lg" id="btn_Save" value="保存"/></td>
+            <td class="formValue" colspan="2"></td>
+        </tr>
+    </table>
+</div>

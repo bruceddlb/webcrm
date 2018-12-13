@@ -1,0 +1,104 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-----start-slider---->
+<div class="slider" id="home">
+    <script src="/Content/js/responsiveslides.min.js"></script>
+    <script>
+
+        $(function () {
+            // Slideshow 3
+            $("#slider3").responsiveSlides({
+                manualControls: '#slider3-pager',
+            });
+        });
+    </script>
+    <!-- Slideshow -->
+    <ul class="rslides" id="slider3">
+        <li>
+            <img src="~/Content/images/banner/banner_1.jpg" />
+            <div class="slid-info">
+
+            </div>
+        </li>
+        <li>
+            <img src="~/Content/images/banner/banner_2.jpg" />
+            <div class="slid-info">
+
+            </div>
+        </li>
+        <li>
+            <img src="~/Content/images/banner/banner_3.jpg" />
+            <div class="slid-info">
+
+            </div>
+        </li>
+        <li>
+            <img src="~/Content/images/banner/banner_4.jpg" />
+            <div class="slid-info">
+
+            </div>
+        </li>
+        <li>
+            <img src="~/Content/images/banner/banner_5.jpg" />
+            <div class="slid-info">
+
+            </div>
+        </li>
+    </ul>
+    <!-- Slideshow -->
+    <ul id="slider3-pager">
+        <li><a href="#"><span> </span></a></li>
+        <li><a href="#"><span> </span></a></li>
+        <li><a href="#"><span> </span></a></li>
+        <li><a href="#"><span> </span></a></li>
+        <li><a href="#"><span> </span></a></li>
+    </ul>
+</div>
+<!-----//End-slider---->
+@*公司简介*@
+<div id="about" class="about" style="background:#0094ff">
+    <div class="container">
+        <h2>@(new QSDMS.WebSite.Web.Controllers.BaseController().GetLanguageName("Home1"))</h2>
+        <p class="">@Html.Raw(new QSDMS.WebSite.Web.Controllers.BaseController().GetLanguageDesc("Home1"))) </p>
+        <p style="float:right"><a href="/About/Index">more</a></p>
+    </div>
+
+</div>
+@*资源*@
+<div id="resource" class="" style="background:#808080">
+    <div class="container">
+        <h2>@(new QSDMS.WebSite.Web.Controllers.BaseController().GetLanguageName("Home2"))</h2>
+        <div class="row">
+            <div class="col-md-5">
+                <p class="">@Html.Raw(new QSDMS.WebSite.Web.Controllers.BaseController().GetLanguageDesc("Home2")) </p> <p style="float:right"><a href="/ServiceResource/Index">more</a></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+@*服务*@
+<div id="service" class="" style="background:#b6ff00">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+            </div>
+            <div class="col-md-6">
+                <h2>@(new QSDMS.WebSite.Web.Controllers.BaseController().GetLanguageName("Home3"))</h2>
+                <p class="">@Html.Raw(new QSDMS.WebSite.Web.Controllers.BaseController().GetLanguageDesc("Home3")) </p> <p style="float:right"><a href="/HealthService/Index">more</a></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+@*资讯*@
+<div id="news" class="" style="background:#0094ff">
+    <div class="container">
+
+        <h2 style="text-align:center">@(new QSDMS.WebSite.Web.Controllers.BaseController().GetLanguageName("Home4"))</h2>
+        <p class="">@Html.Raw(new QSDMS.WebSite.Web.Controllers.BaseController().GetLanguageDesc("Home4")) </p>
+        <p style="float:right"><a href="/News/Index">more</a></p>
+
+    </div>
+
+</div>

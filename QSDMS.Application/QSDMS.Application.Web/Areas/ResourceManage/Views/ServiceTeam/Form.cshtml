@@ -1,0 +1,243 @@
+﻿@{
+    ViewBag.Title = "系统设置编辑";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+
+<script src="/Content/scripts/plugins/touchTouch/touchTouch.jquery.js"></script>
+<link href="/Content/scripts/plugins/touchTouch/touchTouch.css" rel="stylesheet" />
+<script src="~/Content/scripts/plugins/ueditor/ueditor.config.js"></script>
+<script src="~/Content/scripts/plugins/ueditor/ueditor.all.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    var editor;
+    var dtips;
+    $(function () {
+        initRichTextEditor();
+        initControl();
+        ////上传图片
+        $('#uploadPreview').unbind("click").bind("click", function () {
+            $("#uploadFile").click();
+        });
+    })
+    //初始化控件
+    function initControl() {
+        $("#dllLanguage").ComboBox({
+            url: "/SiteManage/LanguageInfo/GetListJson",
+            param: null,
+            id: "LanguageKey",
+            text: "Name",
+            description: "==选择语言==",
+            height: "170px",
+            allowSearch: true
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            $("#dllClass").ComboBox({
+                url: "/ResourceManage/Cate/GetListJson",
+                param: { language: value },
+                id: "ServiceClassId",
+                text: "Title",
+                description: "选择类别",
+                height: "170px"
+
+            });
+        });
+        $("#dllClass").ComboBox({
+            description: "选择类别",
+            height: "170px"
+        });
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "/ResourceManage/ServiceTeam/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    if (data.LanguageKey) {
+                        $("#dllLanguage").ComboBoxSetValue(data.LanguageKey).trigger("change");
+                    }
+                    if (data.ClassId) {
+                        $("#dllClass").ComboBoxSetValue(data.ClassId);
+                    }
+                    if (data.FaceImage) {
+                        document.getElementById('uploadPreview').src = data.FaceImage;
+                    }
+                }
+            });
+        } else {
+
+        }
+    }
+    function initRichTextEditor() {
+        eidtor = UE.getEditor('Content',
+            {
+                initialFrameHeight: "300"
+            });
+        eidtor.addListener('contentChange', function () {
+            //    editor.sync();
+
+        });
+        //同步内容
+        eidtor.addListener("blur", function () {
+            eidtor.sync();
+            var content = eidtor.getContent();
+            if (content.length < 1) {
+
+            } else {
+
+            }
+        })
+        eidtor.ready(function () {
+            eidtor.setHeight(320);
+        });
+
+    };
+    // HTML编码
+    function encodeHtml(value) {
+        if (!value || value.length == 0) {
+            return "";
+        }
+
+        return value.replace(/&/g, "&amp;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/</g, "&lt;")
+                    .replace(/'/, "&quot;");
+    }
+
+
+    /// <summary>
+    /// HTML解码
+    /// </summary>
+    function decodeHtml(value) {
+        if (!value || value.length == 0) {
+            return "";
+        };
+        return value.replace(/&lt;/g, "<")
+                    .replace(/&gt;/g, ">")
+                    .replace(/&amp;/g, "&")
+                    .replace(/&quot;/g, "'");
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        postData["Content"] = encodeHtml(eidtor.getContent());
+        postData["LanguageKey"] = $("#dllLanguage").attr('data-value');
+        postData["ClassId"] = $("#dllClass").attr('data-value');
+        $.SaveForm({
+            url: "/ResourceManage/ServiceTeam/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+    //检查文件类型
+    function UpPicFile() {
+        var array = new Array('gif', 'jpeg', 'png', 'jpg');  //可以上传的文件类型
+        var fileContentType = $("#uploadFile").val().match(/^(.*)(\.)(.{1,8})$/)[3]; //这个文件类型正则很有用：）
+        var isExists = false;
+        for (var i in array) {
+            if (fileContentType.toLowerCase() == array[i].toLowerCase()) {
+                isExists = true;
+            }
+        }
+        if (isExists == false) {
+            $("#uploadFile").val("")
+            dialogMsg("上传图片类型不正确!", 2);
+            return false;
+        }
+        var f = document.getElementById('uploadFile').files[0]
+        var src = window.URL.createObjectURL(f);
+        document.getElementById('uploadPreview').src = src;
+        var formData = new FormData();
+        //为FormData对象添加数据
+        $.each($('#uploadFile')[0].files, function (i, file) {
+            formData.append('file', file);
+        });
+        //上传应用图标
+        $.ajax({
+            url: "/Upload/UploadFile",
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data && data.IsSuccess) {
+                    $("#FaceImage").val(data.ResultData["files"]);
+                }
+                else {
+                    alert(data.Message);
+                }
+            }
+        });
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">语言<font face="宋体">*</font></td>
+            <td class="formValue">
+                <div id="dllLanguage" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">分类<font face="宋体">*</font></td>
+            <td class="formValue">
+                <div id="dllClass" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">标题<font face="宋体">*</font></td>
+            <td class="formValue">
+                <input id="Title" type="text" class="form-control" placeholder="请输入标题" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">姓名<font face="宋体">*</font></td>
+            <td class="formValue">
+                <input id="Name" type="text" class="form-control" placeholder="请输入标题" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="formTitle">职称<font face="宋体">*</font></td>
+            <td class="formValue">
+                <input id="Post" type="text" class="form-control" placeholder="请输入标题" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="formTitle">图片</td>
+            <td class="formValue">
+                <input id="FaceImage" type="hidden" />
+                <div class="" style="width: 100px; height: 100px;">
+                    <img id="uploadPreview" style="width: 100px; height: 100px; border-radius: 100px;" src="~/Content/images/add.png" />
+                    <input type="file" name="uploadFile" id="uploadFile" style="display:none" onchange="UpPicFile()">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">描述</td>
+            <td class="formValue">
+                <input id="SortDesc" type="text" class="form-control" style="height: 70px;" />
+            </td>
+        </tr>
+
+        <tr style="display:none">
+            <td class="formTitle">备注</td>
+            <td class="formValue">
+                <div id="" style="min-height:250px;" class="">
+                    <textarea id="Content" class="clearfix" rows="5" style="width:100%"></textarea>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+

@@ -1,0 +1,148 @@
+﻿@{
+    Layout = "~/Areas/WebSite/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "健康服务";
+}
+<script>
+    var type = request('type');
+    var _normalId = "";
+    function request(keyValue) {
+        var search = location.search.slice(1);
+        var arr = search.split("&");
+        for (var i = 0; i < arr.length; i++) {
+            var ar = arr[i].split("=");
+            if (ar[0] == keyValue) {
+                if (unescape(ar[1]) == 'undefined') {
+                    return "";
+                } else {
+                    return unescape(ar[1]);
+                }
+            }
+        }
+        return "";
+    }
+    function GetClassData(type, pid) {
+        $.ajax({
+            url: "/WebSite/HealthService/GetClassList",
+            type: 'get',
+            data: { type: type },
+            async: false,
+            success: function (data) {
+                if (data) {
+                    var json = eval("(" + data + ")");
+                    var html = "";
+                    for (var i = 0; i < json.length; i++) {
+                        var row = json[i];
+                        html += '<li><a onclick=GetData("' + row.HealthAticleId + '")  id=' + row.HealthAticleId + '>' + row.Title + '</a></li>';
+
+                    }
+                    $("#" + pid).empty().append(html);
+                }
+            }
+        });
+    }
+
+    function GetData(id) {
+        if (!id) {
+            //默认第一个
+            id = $("#ulmedical").find("li:eq(0)").find("a").attr("id");
+            if (type) {
+                switch (type) {
+                    case "1":
+                        id = $("#ulmedical").find("li:eq(0)").find("a").attr("id");
+                        break;
+                    case "2":
+                        id = $("#ulhealth").find("li:eq(0)").find("a").attr("id");
+                        break;
+                    case "3":
+                        id = $("#ulmember").find("li:eq(0)").find("a").attr("id");
+                        break;
+                }
+            }
+        }
+        $.get("/WebSite/HealthService/GetDataList", { id: id }, function (data) {
+            if (data) {
+                var json = eval("(" + data + ")");
+                var html = '<div class="" style="margin-top:20px">  ' + json.Content + '</div>';
+                $("#contentpanel").empty().append(html);
+            }
+        });
+    }
+    function BindClass(type) {
+        GetClassData(2, "ulmedical");
+        GetClassData(1, "ulhealth");
+        GetClassData(3, "ulmember");
+
+        $(".treebox .level1>a").click(function () {
+            //隐藏其他的分类
+            $(this).addClass('current')   //给当前元素添加"current"样式
+            .find('i').addClass('down')   //小箭头向下样式
+            .parent().next().slideDown('slow', 'easeOutQuad')  //下一个元素显示
+            .parent().siblings().children('a').removeClass('current')//父元素的兄弟元素的子元素去除"current"样式
+            .find('i').removeClass('down').parent().next().slideUp('slow', 'easeOutQuad');//隐藏
+            return false; //阻止默认时间
+        });
+
+        //根据类型定位对应分类
+        if (type) {
+            switch (type) {
+                case "1":
+                    var $obj = $("#ulmedical").parent().siblings();
+                    $obj.find("ul").css({ "display": "none" });
+                    $obj.find("a").removeClass("current");
+                    $("#ulmedical").css({ "display": "block" }).parent().find("a").addClass("current");
+                    break;
+                case "2":
+                    var $obj = $("#ulhealth").parent().siblings();
+                    $obj.find("ul").css({ "display": "none" });
+                    $obj.find("a").removeClass("current");
+                    $("#ulhealth").css({ "display": "block" }).parent().find("a").addClass("current");
+                    break;
+                case "3":
+                    var $obj = $("#ulmember").parent().siblings();
+                    $obj.find("ul").css({ "display": "none" });
+                    $obj.find("a").removeClass("current");
+                    $("#ulmember").css({ "display": "block" }).parent().find("a").addClass("current");
+                    break;
+            }
+        }
+    }
+    $(function () {
+        BindClass(type);
+        GetData(null);
+    })
+
+</script>
+
+<div class="" style="" id="">
+    <img src="@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("4") == "" ? "/WebSiteContent/images/title3.jpg" : new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("4"))" width="100%" class="wow animated fadeInUp" height="100%" />
+
+</div>
+
+<div class="container" style="margin-top:40px">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="bgTitle" style="margin-top:10px;">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header4"))</div>
+            <div class="treebox">
+                <ul class="menu">
+
+                    <li class="level1">
+                        <a class="current"><em class="ico ico3"></em>@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav8"))<i></i></a>
+                        <ul class="level2" style="overflow: hidden; display: block;" id="ulmedical"></ul>
+                    </li>
+                    <li class="level1">
+                        <a class=""><em class="ico ico3"></em>@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav9"))<i></i></a>
+                        <ul class="level2" style="overflow: hidden; display: none;" id="ulhealth"></ul>
+                    </li>
+                    <li class="level1">
+                        <a class=""><em class="ico ico3"></em>@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav10"))<i></i></a>
+                        <ul class="level2" style="overflow: hidden; display: none;" id="ulmember"></ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9" id="contentpanel">
+            asd
+        </div>
+    </div>
+</div>

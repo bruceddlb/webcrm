@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <img src="/content/images/about.png" width="100%" />
+    <div> 
+        @Html.Raw(ViewBag.Info) 
+    </div>
+</body>
+</html>

@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="@(QSDMS.Util.WebHelper.NoHtml(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("keyword")))">
+    <meta name="description" content="@(QSDMS.Util.WebHelper.NoHtml( new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("keycontent")))">
+    <title>@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("systemname"))-@ViewBag.Title</title>
+    <link href="~/WebSiteContent/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/WebSiteContent/css/theme-style.css?a=1" rel="stylesheet" />
+    <link href="~/WebSiteContent/css/hover.css" rel="stylesheet" />
+    <link href="~/Content/styles/animate.min.css" rel="stylesheet" />
+    @RenderSection("css", false)
+    <script src="~/WebSiteContent/js/jquery.min.js"></script>
+    <script src="~/WebSiteContent/js/easing.js"></script>
+    <script src="~/WebSiteContent/js/move-top.js"></script>
+	<script src="~/WebSiteContent/js/wow.min.js"></script>
+    <script type="text/javascript">
+        //jQuery(document).ready(function ($) {
+
+        //});
+        function pageName() {
+            var strUrl = location.href;
+            var arrUrl = strUrl.split("/");
+            var strPage = arrUrl[arrUrl.length - 1];
+            return strPage;
+        }
+        function GetUrlRelativePath() {
+            var url = document.location.toString();
+            var arrUrl = url.split("//");
+
+            var start = arrUrl[1].indexOf("/");
+            var relUrl = arrUrl[1].substring(start);//stop省略，截取从start开始到结尾的所有字符
+
+            if (relUrl.indexOf("?") != -1) {
+                relUrl = relUrl.split("?")[0];
+            }
+            return relUrl;
+        }
+
+        $(function () {
+            $('a[href*=#],area[href*=#]').click(function () {
+
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var $target = $(this.hash);
+                    $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+                    if ($target.length) {
+                        //if (GetUrlRelativePath().indexOf("/WebSite/Default/Index") == -1) {
+                        //    window.location.href = "/WebSite/Default/Index" + this.hash;
+                        //}
+                        var targetOffset = $target.offset().top;
+                        $('html,body').animate({
+                            scrollTop: targetOffset
+                        }, 1000);
+                        return false;
+                    }
+                }
+            });
+            //$(".scroll").unbind("click").click(function (event) {
+            //    event.preventDefault();
+            //    try {
+            //        //如果不是首页就重新定位到首页
+            //        if (GetUrlRelativePath().indexOf("/WebSite/Default/Index") == -1) {
+            //            window.location.href = "/WebSite/Default/Index" + this.hash;
+            //        }
+            //        // alert(this.hash)
+            //        //window.location.href = "/WebSite/Default/Index" + this.hash;
+            //        //setTimeout(function () {
+            //        //    $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 1000);
+            //        //},1000);
+
+            //    } catch (e) {
+
+            //    }
+            //    $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 1000);
+            //    //var id = this.hash.replace("#","");
+            //    //var $animated = $("#" + id);
+            //    //setTimeout(function () {
+            //    //    $animated.removeClass("fadeInDownBig").addClass('fadeInDownBig' + ' animated infinite');
+            //    //}, 500);
+            //    //setTimeout(function () {
+            //    //    $animated.removeClass();
+            //    //}, 1000);
+            //});
+
+            //控制相应布局菜单显示
+            var pull = $('#pull');
+            menu = $('nav ul');
+            menuHeight = menu.height();
+            $(pull).on('click', function (e) {
+                e.preventDefault();
+                menu.slideToggle();
+            });
+            $(window).resize(function () {
+                //var w = $(window).width();
+                //if (w > 320 && menu.is(':hidden')) {
+                //    menu.removeAttr('style');
+                //}
+            });
+			var wow = new WOW({
+				boxClass: 'wow',
+				animateClass: 'animated',
+				offset: 0,
+				mobile: true,
+				live: true
+			});
+			wow.init();
+        });
+        function ChangeLanguage(lg) {
+            document.location.href = "/WebSite/Default/Index?languge=" + lg;
+        }
+    </script>
+    @RenderSection("scripts", false)
+    <style>
+        .bgTitle {
+            background: url(/WebSiteContent/images/tbg.png);
+            height: 80px;
+            line-height: 80px;
+            color: #fff;
+            text-align: left;
+            font-size: 18px;
+            font-weight: bold;
+            padding-left: 50px;
+        }
+
+        .more {
+            background: #fff;
+            color: #023C6B;
+            width: 80px;
+            display: inline-block;
+            text-align: center;
+            padding: 5px;
+            border-radius: 20px;
+            -webkit-box-shadow: 0 0 15px #AFCED3;
+            -moz-box-shadow: 0 0 15px #AFCED3;
+            box-shadow: 0 0 10px #AFCED3;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <header class="header" style="position: fixed; left: 0; top: 0; width: 100%; height: 100px; z-index: 9999; background-color: #003C6E; ">
+            <div class="container" style="position:relative">
+                <div class="logo" style="margin-top: 10px;"> <a href="/WebSite/Default/Index"><img src="/WebSiteContent/images/title-logo.jpg" title="" style="height:90px;" /></a> </div>
+                <nav class="top-nav" style="">
+                    <ul class="top-nav" style="float: left;">
+                        <li class="active"><a href="/WebSite/Default/Index" class="scroll">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header1"))</a></li>
+                        <li class=""><a href="/WebSite/About/Index" class="scroll">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header2"))</a></li>
+                        <li class=""><a href="/WebSite/MedicalResource/Index" class="scroll">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header3"))</a></li>
+                        <li class=""><a href="/WebSite/HealthService/Index" class="scroll">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header4"))</a></li>
+                        <li class=""><a href="/WebSite/News/Index" class="scroll">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header5"))</a></li>
+                        <li class=""><a href="/WebSite/Contact/Index" class="scroll">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header6"))</a></li>
+                        <li style="width:60px;display:none"> <a onclick="ChangeLanguage('cn')">中文</a></li>
+                        <li style="display:none">  <a onclick="ChangeLanguage('en')">english</a></li>
+                     
+                    </ul>
+                  
+                    <a href="#" id="pull"><img src="/WebSiteContent/images/nav-icon.png" title="menu" /></a>
+                    @*<ul class="top-nav" style="float:right;margin-left:100px">
+
+                            <li>  <a href="/home/index">管理后台</a></li>
+                        </ul>*@
+                </nav>
+                <div class="clearfix"> </div>
+				  <span style="position: absolute;top: 5px;right: 65px;">
+                        <img src="/WebSiteContent/images/header3.png" />
+                    </span>
+            </div>
+        </header>
+        <div class="body-content" style="overflow-x:hidden;margin-top:100px;">
+            @RenderBody()
+            <div class="" style="background: #D2D2D2;">
+                <footer style="height:100%;padding:10px" class="container">
+                    <div style="">@Html.Raw((new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("footer")))</div>
+                    @*<div class="row ">
+                        <div class="col-md-9">
+                            <div class="row" style="padding-top:80px">
+                                <div class="col-md-2" style="float:left">
+                                    <div style="padding:10px">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header2"))</div>
+                                    <div style="padding:10px"><a href="/website/About/index#company">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("comp1"))</a></div>
+
+                                    <div style="padding:10px"><a href="/website/About/index#culture">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("comp2"))</a></div>
+
+                                    <div style="padding:10px"><a href="/website/About/index#hope">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("comp3"))</a></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="col-md-2" style="float:left">
+                                    <div style="padding:10px">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header3"))</div>
+                                    <div style="padding:10px"><a href="/WebSite/ServiceResource/Index">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav5"))</a></div>
+                                    <div style="padding:10px"><a href="/WebSite/MedicalResource/Index">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav6"))</a></div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="col-md-2" style="float:left">
+
+                                    <div style="padding:10px">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header4"))</div>
+                                    <div style="padding:10px"><a href="/WebSite/HealthService/Index?type=1">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav8"))</a></div>
+                                    <div style="padding:10px"><a href="/WebSite/HealthService/Index?type=2">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav9"))</a></div>
+                                    <div style="padding:10px"><a href="/WebSite/HealthService/Index?type=3">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav10"))</a></div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="col-md-2" style="float:left">
+
+                                    <div style="padding:10px">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header5"))</div>
+                                    <div style="padding:10px"><a href="/WebSite/News/Index?type=1">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav1"))</a></div>
+                                    <div style="padding:10px"><a href="/WebSite/News/Index?type=2">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav2"))</a></div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="col-md-2" style="float:left">
+
+                                    <div style="padding:10px">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header6"))</div>
+                                    <div style="padding:10px"><a href="/website/Contact/index">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav3"))</a></div>
+                                    <div style="padding:10px"><a href="/website/Contact/Job">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav4"))</a></div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div style="padding-top: 80px; text-align: center" class="">
+                               <div>
+							    <img src="/WebSiteContent/images/footer1.png" />
+							   </div>
+							    <div style="text-align: center" class="">
+                                <img src="/WebSiteContent/images/wx.png" />
+								</div>
+                            </div>
+							
+                        </div>
+
+                    </div>*@
+
+                    <div style="margin-top:100px;"></div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

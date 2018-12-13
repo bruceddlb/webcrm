@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "~/Areas/WebSite/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "关于我们";
+}
+
+<script>
+    $(function () {
+        //锚点跳转滑动效果
+        //$('a[href*=#],area[href*=#]').click(function () {
+
+        //    if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+        //        var $target = $(this.hash);
+        //        $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+        //        if ($target.length) {
+        //            var targetOffset = $target.offset().top;
+        //            $('html,body').animate({
+        //                scrollTop: targetOffset
+        //            }, 1000);
+        //            return false;
+        //        }
+        //    }
+        //});
+    })
+</script>
+<div class="" style="" id="">
+    <img src="@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("2") == "" ? "/WebSiteContent/images/title4.jpg" : new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetBackGround("2"))" width="100%" class="animated fadeInUp" height="100%" />
+   
+</div>
+<div class="" style="position:relative">
+    <div id="company" style="position:absolute;top:-100px"> </div>
+    @Html.Raw(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("comp1"))
+
+</div>
+<div class="" style="position:relative">
+    <div id="culture" style="position:absolute;top:-100px"> </div>
+    @Html.Raw(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("comp2"))
+
+</div>
+<div class="" style="position:relative">
+    <div id="hope" style="position:absolute;top:-100px"> 111</div>
+    @Html.Raw(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageContent("comp3"))
+
+</div>

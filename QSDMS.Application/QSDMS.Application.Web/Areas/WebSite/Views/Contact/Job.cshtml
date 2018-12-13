@@ -1,0 +1,66 @@
+﻿@{
+
+    Layout = "~/Areas/WebSite/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "加入我们";
+}
+<script>
+    function GetData() {
+        $.get("/WebSite/Job/GetJobList", null, function (data) {
+            if (data) {
+                var json = eval("(" + data + ")");
+                var html = "";
+                for (var i = 0; i < json.length; i++) {
+                    var row = json[i];
+                    html += '<div style="padding:10px;">';
+                    html += ' <div class="col-md-8">';
+                    html += '<div class="" style="font-weight:bold; font-size:18px;color:#1a6cb9">' + row.Title + '</div>';
+                    html += '<div class="" style="padding-top:10px">  ' + row.Content + '</div>';                  
+                    html += ' </div>';
+                    html += '<div class="col-md-4" style="text-align:rigth">';
+                    var path = "/WebSiteContent/images/nopic.png";
+                    if (row.FaceImage) {
+                        path = row.FaceImage;
+                    }
+                    html += ' <img src="' + path + '" title="name" width="100%">';
+                    html += '</div>';
+                    html += '</div>';
+                    html += ' <div class="clearfix"> </div>';
+                }
+
+                $("#jobpanel").empty().append(html);
+            }
+        });
+    }
+    $(function () {
+        GetData();
+    })
+</script>
+<div class="" style="" id="">
+    <img src="/WebSiteContent/images/title5.jpg" width="100%" class="animated fadeInDownBig" />
+</div>
+<div class="container" style="margin-top:40px">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="bgTitle" style="margin-top:10px;">@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("header6"))</div>
+            <div class="treebox">
+                <ul class="menu">
+
+                    <li class="level1">
+                        <a class="current" href="/WebSite/Contact/Index"><em class="ico ico3"></em>@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav3"))<i></i></a>
+
+                    </li>
+                    <li class="level1">
+                        <a class="current" href="/WebSite/Contact/job"><em class="ico ico3"></em>@(new QSDMS.Application.Web.Areas.WebSite.Controllers.BaseController().GetLanguageName("nav4"))<i></i></a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="animated fadeIn">
+                <div id="jobpanel"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
